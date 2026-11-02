@@ -1,0 +1,117 @@
+package ADTs.Maps;
+
+import ADTs.Maps.AbstractMap;
+
+import java.util.*;
+
+public  class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
+    private ArrayList<MapEntry<K,V>> table = new ArrayList<>();
+    private K key;
+
+    public UnsortedTableMap(){}
+
+    private int findIndex(K key){
+        int n = table.size();
+        for(int j =0; j< n; j++)
+            if(table.get(j).getKey().equals(key))
+                return j;
+        return -1;
+    }
+
+
+    public V get(K key, V value){
+        int j = findIndex(key);
+        if(j==-1)
+            return null;
+        return table.get(j).getValue();
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return false;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
+    }
+
+    @Override
+    public V get(Object key) {
+        return null;
+    }
+
+    public V put(K key, V value){
+        int j = findIndex(key);
+        if(j==-1) {
+            table.add(new MapEntry<>(key, value));
+            return null;
+        }else
+            return table.get(j).setValue(value);
+    }
+
+    @Override
+    public V remove(Object key) {
+        return null;
+    }
+
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public Set<K> keySet() {
+        return null;
+    }
+
+    @Override
+    public Collection<V> values() {
+        return null;
+    }
+
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        return null;
+    }
+
+    public V removes(K key){
+        int j = findIndex(key);
+        int n = size();
+        if(j==-1)
+            return null;
+        V answer = table.get(j).getValue();
+        if(j!=n-1)
+            table.set(j, table.get(n-1));
+        table.remove(n-1);
+        return answer;
+    }
+
+    private class EntryIterator implements Iterator<Entry<K, V>> {
+        private int j = 0;
+        public boolean hasNext() { return j < table.size(); }
+        @Override
+        public Entry<K, V> next() {
+            if (j == table.size()) throw new NoSuchElementException();
+            return table.get(j++);
+        }
+        public void remove() {throw new UnsupportedOperationException(); }
+    }
+
+    private class EntryIterable implements Iterable<Entry<K, V>>{
+        @Override
+        public Iterator<Entry<K, V>> iterator() {return new EntryIterator(); }
+    }
+
+    public Iterable <Entry<K,V>> EntrySet (){ return new EntryIterable();}
+}
